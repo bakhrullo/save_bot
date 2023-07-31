@@ -11,7 +11,7 @@ from tgbot.misc.check_member import check_member
 from tgbot.misc.i18n import i18ns
 from tgbot.misc.states import Start, Download
 from tgbot.services.mp4_to_mp3 import convert
-from tgbot.services.request import Request
+from tgbot.services.request_2 import Request
 
 _ = i18ns.gettext
 __ = i18ns.lazy_gettext
