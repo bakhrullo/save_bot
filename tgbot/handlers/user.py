@@ -46,8 +46,9 @@ async def get_link(m: Message, config: Config):
             link = link.replace("https://youtu.be/", "")
         content = await Request(config, link).you_tube()
         await mes.delete()
-        await m.answer_video(video=content["formats"][-1]["url"], caption=content["title"])
+        print(content["formats"])
         await convert(video_url=content["formats"][-1]["url"], file_name=m.from_user.id)
+        await m.answer_video(video=InputFile(f"{m.from_user.id}.mp4"), caption=content["title"])
         await m.answer_audio(audio=InputFile(f"{m.from_user.id}.mp3"), caption=content["title"])
         os.remove(f"{m.from_user.id}.mp4")
         return os.remove(f"{m.from_user.id}.mp3")
@@ -58,7 +59,9 @@ async def get_link(m: Message, config: Config):
         if len(content["posts"]) == 1:
             if content["posts"][0]["is_video"]:
                 await m.answer_video(video=content["posts"][0]["contentUrl"], caption=content["articleBody"])
+                print("awdwd")
                 await convert(video_url=content["posts"][0]["contentUrl"], file_name=m.from_user.id)
+                print("adwad")
                 await m.answer_audio(audio=InputFile(f"{m.from_user.id}.mp3"))
                 os.remove(f"{m.from_user.id}.mp4")
                 return os.remove(f"{m.from_user.id}.mp3")
@@ -76,6 +79,7 @@ async def get_link(m: Message, config: Config):
             "https://vt.tiktok.com"):
         content = await Request(config, link).tik_tok()
         await mes.delete()
+        print(content)
         await m.answer_video(video=content["video"][0], caption=content["description"][0])
         await m.answer_audio(audio=content["music"][0])
     else:

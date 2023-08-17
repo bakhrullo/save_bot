@@ -4,6 +4,7 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.contrib.fsm_storage.redis import RedisStorage2
+from aiogram.bot.api import TelegramAPIServer
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
@@ -18,6 +19,7 @@ from tgbot.middlewares.environment import EnvironmentMiddleware
 from tgbot.misc.i18n import i18ns
 
 logger = logging.getLogger(__name__)
+local_server = TelegramAPIServer.from_base('http://0.0.0.0:8081/')
 
 
 def register_all_middlewares(dp, config):
@@ -46,7 +48,7 @@ async def main():
     config: Config = load_config(".env")
     storage = RedisStorage2() if config.tg_bot.use_redis else MemoryStorage()
 
-    bot = Bot(token=config.tg_bot.token, parse_mode='HTML')
+    bot = Bot(token=config.tg_bot.token, parse_mode='HTML', server=local_server)
     dp = Dispatcher(bot, storage=storage)
 
     engine = create_async_engine(
